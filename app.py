@@ -3,6 +3,9 @@ from src.agent import Agent
 from src.orchestrator import Orchestrator
 from src.routing import shortest_path
 import sqlite3
+from src.logging_setup import setup_logging
+
+setup_logging()
 
 st.set_page_config(page_title="Sentinel AI India", page_icon="🛰", layout="wide")
 
@@ -36,7 +39,7 @@ def render_command_centre():
             task = orch.next_task()
             if task is None:
                 break
-            urgency, name = task
+            urgency, count, name, trace_id = task
             st.success(f"Priority {urgency} → {name}")
 
     st.divider()

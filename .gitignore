@@ -6,3 +6,5 @@ notebooks/craft/big_log.txt
 notebooks/craft/test_logs/
 notebooks/craft/config.txt
 notebooks/craft/config.txt.tmp
+notebooks/craft/chart_*.png
+notebooks/craft/chart_*.html

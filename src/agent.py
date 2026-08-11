@@ -15,7 +15,7 @@ def validate_agent_name(name: str) -> str:
     return name
 
 
-class Agent:
+class BaseAgent:
     def __init__(self, name: str):
         self.name = validate_agent_name(name)
         self.inbox: asyncio.Queue = asyncio.Queue()
@@ -29,5 +29,18 @@ class Agent:
             logger.warning(f"REJECTED message: {e}")
             return None
 
+    def handle(self, message):
+        raise NotImplementedError
+
     def __repr__(self):
-        return f"Agent({self.name})"
+        return f"{type(self).__name__}({self.name})"
+
+
+class CloudShieldAgent(BaseAgent):
+    def handle(self, message):
+        logger.info(f"[{self.name}] Security alert: {message}")
+
+
+class AutoPilotAgent(BaseAgent):
+    def handle(self, message):
+        logger.info(f"[{self.name}] Dataset event: {message}")

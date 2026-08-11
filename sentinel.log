@@ -7,3 +7,9 @@
 {"timestamp": "2026-08-10T11:44:01.235486+00:00", "level": "INFO", "logger": "sentinel.src.orchestrator", "message": "Task queued: urgency=1 task=Security Breach! trace_id=a9575282-ee18-4b1c-9103-e0a6ca91eadd"}
 {"timestamp": "2026-08-10T11:44:01.235672+00:00", "level": "INFO", "logger": "sentinel.src.orchestrator", "message": "Task queued: urgency=2 task=Dataset Profiling Complete trace_id=d7f7dd9a-74a2-4814-ac25-ed2f60a9f3b1"}
 {"timestamp": "2026-08-10T11:44:01.235791+00:00", "level": "INFO", "logger": "sentinel.src.orchestrator", "message": "Task queued: urgency=2 task=Dataset Profiling Complete trace_id=d7f7dd9a-74a2-4814-ac25-ed2f60a9f3b1"}
+{"timestamp": "2026-08-11T08:27:33.323879+00:00", "level": "INFO", "logger": "sentinel.src.orchestrator", "message": "Task queued: urgency=3 task=Routine Report trace_id=c1a8e690-5140-46e5-aa1c-5e21565d55af"}
+{"timestamp": "2026-08-11T08:27:33.324318+00:00", "level": "INFO", "logger": "sentinel.src.orchestrator", "message": "Task queued: urgency=3 task=Routine Report trace_id=c1a8e690-5140-46e5-aa1c-5e21565d55af"}
+{"timestamp": "2026-08-11T08:27:33.324486+00:00", "level": "INFO", "logger": "sentinel.src.orchestrator", "message": "Task queued: urgency=1 task=Security Breach! trace_id=35fdf14a-2060-46da-bc91-5c0d1fa7bc87"}
+{"timestamp": "2026-08-11T08:27:33.324597+00:00", "level": "INFO", "logger": "sentinel.src.orchestrator", "message": "Task queued: urgency=1 task=Security Breach! trace_id=35fdf14a-2060-46da-bc91-5c0d1fa7bc87"}
+{"timestamp": "2026-08-11T08:27:33.324700+00:00", "level": "INFO", "logger": "sentinel.src.orchestrator", "message": "Task queued: urgency=2 task=Dataset Profiling Complete trace_id=9699939d-8628-4d3f-b8ec-07ec359fd91b"}
+{"timestamp": "2026-08-11T08:27:33.324814+00:00", "level": "INFO", "logger": "sentinel.src.orchestrator", "message": "Task queued: urgency=2 task=Dataset Profiling Complete trace_id=9699939d-8628-4d3f-b8ec-07ec359fd91b"}

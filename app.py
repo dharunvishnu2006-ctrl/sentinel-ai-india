@@ -1,5 +1,5 @@
 import streamlit as st
-from src.agent import Agent
+from src.agent import CloudShieldAgent, AutoPilotAgent
 from src.orchestrator import Orchestrator
 from src.routing import shortest_path
 import sqlite3
@@ -18,8 +18,8 @@ def render_command_centre():
     st.title("🛰 Sentinel AI India — Command Centre")
     st.caption("Real-Time Multi-Agent Monitoring Dashboard")
 
-    cloudshield = Agent("CloudShield")
-    autopilot = Agent("AutoPilot")
+    cloudshield = CloudShieldAgent("CloudShield")
+    autopilot = AutoPilotAgent("AutoPilot")
 
     col1, col2 = st.columns(2)
 

@@ -8,3 +8,5 @@ notebooks/craft/config.txt
 notebooks/craft/config.txt.tmp
 notebooks/craft/chart_*.png
 notebooks/craft/chart_*.html
+.env
+sentinel.log

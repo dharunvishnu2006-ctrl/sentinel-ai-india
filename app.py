@@ -2,7 +2,6 @@ import streamlit as st
 from src.agent import CloudShieldAgent, AutoPilotAgent
 from src.orchestrator import Orchestrator
 from src.routing import shortest_path
-import sqlite3
 from src.logging_setup import setup_logging
 
 setup_logging()
@@ -25,7 +24,6 @@ def render_command_centre():
     import random as rnd
 
     rnd.seed(1)
-    # Fake demo data for chart placeholder - not security-sensitive
     queue_depths = [rnd.randint(0, 15) for _ in range(20)]  # nosec B311
     tasks_per_agent = {"CloudShield": 11, "AutoPilot": 2, "Sentinel": 7}
     response_times = [120, 340, 89, 560, 210, 45, 670, 130, 290, 88]
@@ -60,6 +58,7 @@ def render_command_centre():
     st.subheader("📦 Response Time Spread by Agent")
 
     import seaborn as sns
+    import pandas as pd
 
     response_times_by_agent = {
         "CloudShield": [120, 340, 560, 210, 670],
@@ -71,8 +70,6 @@ def render_command_centre():
     for agent, times in response_times_by_agent.items():
         for t in times:
             rows.append({"agent": agent, "response_ms": t})
-
-    import pandas as pd
 
     df = pd.DataFrame(rows)
 
@@ -152,43 +149,39 @@ def render_command_centre():
     st.divider()
     st.subheader("📊 System Status")
 
-    try:
-        conn = sqlite3.connect("data/sentinel.db")
-        cursor = conn.cursor()
+    from src.clients import get_cloudshield_status, get_autopilot_status
 
-        cursor.execute(
-            "SELECT alerts_count, timestamp FROM cloudshield_status "
-            "ORDER BY id DESC LIMIT 1"
-        )
-        cs_row = cursor.fetchone()
+    @st.cache_data(ttl=30)
+    def cached_cloudshield_status():
+        return get_cloudshield_status()
 
-        cursor.execute(
-            "SELECT datasets_profiled, timestamp FROM autopilot_status "
-            "ORDER BY id DESC LIMIT 1"
-        )
-        ap_row = cursor.fetchone()
-        conn.close()
+    @st.cache_data(ttl=30)
+    def cached_autopilot_status():
+        return get_autopilot_status()
 
-        c1, c2 = st.columns(2)
+    cs_result = cached_cloudshield_status()
+    ap_result = cached_autopilot_status()
 
-        with c1:
-            st.markdown("### 🛡 CloudShield")
-            if cs_row:
-                st.metric("Alerts", cs_row[0])
-                st.caption(f"Last updated: {cs_row[1]}")
-            else:
-                st.info("No data yet")
+    c1, c2 = st.columns(2)
 
-        with c2:
-            st.markdown("### 🚀 AutoPilot")
-            if ap_row:
-                st.metric("Datasets Profiled", ap_row[0])
-                st.caption(f"Last updated: {ap_row[1]}")
-            else:
-                st.info("No data yet")
+    with c1:
+        st.markdown("### 🛡 CloudShield")
+        if cs_result["status"] == "online":
+            st.metric("Alerts", cs_result["data"]["alerts_count"])
+            st.caption("Status: 🟢 Online")
+        else:
+            st.warning("🟡 Degraded — CloudShield unreachable")
 
-    except Exception as e:
-        st.error(f"Database Error: {e}")
+    with c2:
+        st.markdown("### 🚀 AutoPilot")
+        if ap_result["status"] == "online":
+            st.metric(
+                "Datasets Profiled",
+                ap_result["data"]["datasets_profiled"],
+            )
+            st.caption("Status: 🟢 Online")
+        else:
+            st.warning("🟡 Degraded — AutoPilot unreachable")
 
     st.divider()
     st.subheader("🗺 Agent Route Finder")

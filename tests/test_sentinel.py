@@ -6,6 +6,7 @@ from src.routing import shortest_path
 from unittest.mock import patch, MagicMock
 from src.clients import get_cloudshield_status
 from pydantic import ValidationError
+from src.summarise import verify_summary
 
 
 @pytest.mark.asyncio
@@ -125,3 +126,27 @@ def test_orchestrator_single_task(fresh_orchestrator):
     task = fresh_orchestrator.next_task()
     assert task[0] == 2
     assert task[2] == "one task"
+
+
+def test_verify_summary_catches_fabricated_agent():
+    events = [
+        {"agent": "CloudShield", "kind": "info", "payload": "12 alerts detected"},
+    ]
+    known_agents = {"CloudShield", "AutoPilot", "Sentinel"}
+    fabricated = (
+        "CloudShield reported 12 alerts, with AutoPilot handling "
+        "the overflow smoothly."
+    )
+    result = verify_summary(fabricated, events, known_agents)
+    assert result["verified"] is False
+    assert "AutoPilot" in result["unverified_agents"]
+
+
+def test_verify_summary_passes_honest_summary():
+    events = [
+        {"agent": "CloudShield", "kind": "info", "payload": "12 alerts detected"},
+    ]
+    known_agents = {"CloudShield", "AutoPilot", "Sentinel"}
+    honest = "CloudShield reported 12 alerts. No other agents involved."
+    result = verify_summary(honest, events, known_agents)
+    assert result["verified"] is True

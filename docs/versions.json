@@ -1,0 +1,72 @@
+{
+  "versions": [
+    {
+      "version": "v1.0",
+      "status": "shipped",
+      "colour": "#22d3ee",
+      "steps": "1-133",
+      "completion": 22,
+      "tests": 5,
+      "steps_covered": 26,
+      "description": "Foundation - agent backbone sprint",
+      "features": [
+        "Agent Skeleton",
+        "Async Message Passing",
+        "Priority-Queue Orchestrator",
+        "Unified Flask API",
+        "Graph-based Agent Routing"
+      ],
+      "bugs_fixed": []
+    },
+    {
+      "version": "v1.1",
+      "status": "in-progress",
+      "colour": "#22d3ee",
+      "steps": "1-133",
+      "completion": 22,
+      "tests": 18,
+      "steps_covered": 59,
+      "description": "Completion - closing the 107-step gap",
+      "features": [
+        "C1: Typed Records and Validation",
+        "C2: Structured Logging and Errors",
+        "C3: Python Craft Refresher",
+        "C4: OOP Agent Hierarchy",
+        "C5: Generators and Large Files",
+        "C6: Concurrency Beyond asyncio",
+        "C7: Telemetry with NumPy and Pandas",
+        "C8: Theme-Aware Command-Centre Charts",
+        "C9: REST Clients for Both Flagships",
+        "C10: Engineering Discipline",
+        "C11: LLM-Assisted Incident Summaries",
+        "C12: Layer 1 Consolidation"
+      ],
+      "bugs_fixed": [
+        "Dashboard hard-coded dark hex colours - unreadable in light theme, fixed with theme-aware CSS variables",
+        "print() used instead of logging - structured JSON logging added with trace ids",
+        "System Status showed unlabelled tuple positions - fixed with named SQL columns and st.metric",
+        "SQLite dependency on shared file assumed same-machine deployment - replaced with real HTTP clients"
+      ]
+    },
+    {
+      "version": "v2", "status": "planned", "colour": "#10b981",
+      "steps": "134-210", "completion": 35,
+      "description": "The Thinking Command Centre - SQL + maths"
+    },
+    {
+      "version": "v3", "status": "planned", "colour": "#f59e0b",
+      "steps": "211-318", "completion": 53,
+      "description": "Predictive - ML, SHAP, MLflow"
+    },
+    {
+      "version": "v4", "status": "planned", "colour": "#ec4899",
+      "steps": "319-460", "completion": 77,
+      "description": "Deep learning, FastAPI, RAG"
+    },
+    {
+      "version": "v5", "status": "planned", "colour": "#a78bfa",
+      "steps": "461-600", "completion": 100,
+      "description": "Multi-agent, compliance, MLOps"
+    }
+  ]
+}

@@ -12,6 +12,12 @@ from src.sorting import counting_sort
 from src.history import SinglyLinkedList, RecentActionsCache, UndoStack
 from src.hashtable import HashTable, BrokenHashTable
 from src.tree import BST, AVLTree
+from src.routing_advanced import (
+    bfs_shortest_path,
+    dijkstra,
+    bellman_ford,
+    floyd_warshall,
+)
 
 
 @pytest.mark.asyncio
@@ -251,3 +257,39 @@ def test_avl_stays_balanced_on_ascending_input():
     for i in range(50):
         avl.insert(i)
     assert avl.depth() < 10
+
+
+def test_dijkstra_beats_bfs_on_weighted_graph():
+    graph = {
+        "Sentinel": {"A": 250, "X": 30},
+        "A": {"Target": 250},
+        "X": {"Y": 30},
+        "Y": {"Target": 30},
+        "Target": {},
+    }
+    bfs_path = bfs_shortest_path(graph, "Sentinel", "Target")
+    dijkstra_path, dijkstra_cost = dijkstra(graph, "Sentinel", "Target")
+
+    assert bfs_path == ["Sentinel", "A", "Target"]
+    assert dijkstra_path == ["Sentinel", "X", "Y", "Target"]
+    assert dijkstra_cost == 90
+    assert dijkstra_cost < 500
+
+
+def test_bellman_ford_detects_negative_cycle():
+    graph = {"A": {"B": 1}, "B": {"C": -2}, "C": {"A": -2}}
+    _, has_cycle = bellman_ford(graph, "A")
+    assert has_cycle is True
+
+
+def test_floyd_warshall_matches_dijkstra():
+    graph = {
+        "Sentinel": {"A": 250, "X": 30},
+        "A": {"Target": 250},
+        "X": {"Y": 30},
+        "Y": {"Target": 30},
+        "Target": {},
+    }
+    table = floyd_warshall(graph)
+    _, dijkstra_cost = dijkstra(graph, "Sentinel", "Target")
+    assert table["Sentinel"]["Target"] == dijkstra_cost

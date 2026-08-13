@@ -11,6 +11,7 @@ from src.registry import AgentRegistry, min_capacity_that_fits
 from src.sorting import counting_sort
 from src.history import SinglyLinkedList, RecentActionsCache, UndoStack
 from src.hashtable import HashTable, BrokenHashTable
+from src.tree import BST, AVLTree
 
 
 @pytest.mark.asyncio
@@ -236,3 +237,17 @@ def test_broken_hash_still_correct_just_slow():
     for i in range(50):
         bht.put(f"k{i}", i)
     assert bht.get("k25") == 25
+
+
+def test_bst_degenerates_on_ascending_input():
+    bst = BST()
+    for i in range(50):
+        bst.insert(i)
+    assert bst.depth() == 50
+
+
+def test_avl_stays_balanced_on_ascending_input():
+    avl = AVLTree()
+    for i in range(50):
+        avl.insert(i)
+    assert avl.depth() < 10

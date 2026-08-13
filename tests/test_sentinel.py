@@ -8,6 +8,7 @@ from src.clients import get_cloudshield_status
 from pydantic import ValidationError
 from src.summarise import verify_summary
 from src.registry import AgentRegistry, min_capacity_that_fits
+from src.sorting import counting_sort
 
 
 @pytest.mark.asyncio
@@ -167,3 +168,15 @@ def test_min_capacity_that_fits():
     result, checks = min_capacity_that_fits(load=500, max_capacity=1000)
     assert result == 500
     assert checks < 20
+
+
+def test_counting_sort_matches_builtin():
+    data = [3, 1, 4, 1, 5, 2, 3, 1]
+    assert counting_sort(data, max_value=5) == sorted(data)
+
+
+def test_sorted_is_stable():
+    agents = [("A", 200), ("B", 100), ("C", 200), ("D", 100)]
+    result = sorted(agents, key=lambda a: a[1])
+    assert result[0][0] == "B"
+    assert result[1][0] == "D"

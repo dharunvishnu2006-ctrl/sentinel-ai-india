@@ -9,6 +9,7 @@ from pydantic import ValidationError
 from src.summarise import verify_summary
 from src.registry import AgentRegistry, min_capacity_that_fits
 from src.sorting import counting_sort
+from src.history import SinglyLinkedList, RecentActionsCache, UndoStack
 
 
 @pytest.mark.asyncio
@@ -180,3 +181,33 @@ def test_sorted_is_stable():
     result = sorted(agents, key=lambda a: a[1])
     assert result[0][0] == "B"
     assert result[1][0] == "D"
+
+
+def test_linked_list_head_insert_order():
+    ll = SinglyLinkedList()
+    for i in [1, 2, 3]:
+        ll.insert_at_head(i)
+    assert ll.search(3) == 1
+    assert ll.search(1) == 3
+
+
+def test_recent_actions_cache_eviction():
+    cache = RecentActionsCache(capacity=3)
+    for i in range(5):
+        cache.add_action(i)
+    assert cache.walk_forward() == [4, 3, 2]
+    assert cache.walk_backward() == [2, 3, 4]
+
+
+def test_undo_stack_reverses_and_handles_empty():
+    stack = UndoStack()
+    state = {"value": 1}
+
+    def reverse():
+        state["value"] = 1
+
+    state["value"] = 2
+    stack.push("set to 2", reverse)
+    stack.undo()
+    assert state["value"] == 1
+    assert stack.undo() is None

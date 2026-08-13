@@ -10,3 +10,4 @@ notebooks/craft/chart_*.png
 notebooks/craft/chart_*.html
 .env
 sentinel.log
+*.egg-info/

@@ -7,6 +7,7 @@ from unittest.mock import patch, MagicMock
 from src.clients import get_cloudshield_status
 from pydantic import ValidationError
 from src.summarise import verify_summary
+from src.registry import AgentRegistry, min_capacity_that_fits
 
 
 @pytest.mark.asyncio
@@ -150,3 +151,19 @@ def test_verify_summary_passes_honest_summary():
     honest = "CloudShield reported 12 alerts. No other agents involved."
     result = verify_summary(honest, events, known_agents)
     assert result["verified"] is True
+
+
+def test_binary_find_matches_linear_find():
+    registry = AgentRegistry()
+    for i in range(100):
+        registry.add_agent(i, f"Agent-{i}")
+
+    linear_result, _ = registry.linear_find(47)
+    binary_result, _ = registry.binary_find(47)
+    assert linear_result == binary_result == "Agent-47"
+
+
+def test_min_capacity_that_fits():
+    result, checks = min_capacity_that_fits(load=500, max_capacity=1000)
+    assert result == 500
+    assert checks < 20

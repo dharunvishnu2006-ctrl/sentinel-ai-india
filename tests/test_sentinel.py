@@ -19,6 +19,7 @@ from src.routing_advanced import (
     floyd_warshall,
 )
 from src.topology import UnionFind, topological_sort
+from src.trie import Trie, kmp_search
 
 
 @pytest.mark.asyncio
@@ -314,3 +315,31 @@ def test_topological_order_respects_deps():
 def test_topological_sort_detects_cycle():
     deps = {"a": ["b"], "b": ["c"], "c": ["a"]}
     assert topological_sort(deps) is None
+
+
+def test_trie_prefix_search():
+    trie = Trie()
+    for word in ["security_scan", "security_audit", "secure_channel", "network_scan"]:
+        trie.insert(word)
+    results = trie.starts_with("sec")
+    assert sorted(results) == sorted(
+        ["security_scan", "security_audit", "secure_channel"]
+    )
+    assert trie.starts_with("zzz") == []
+
+
+def test_kmp_finds_correct_position():
+    text = "aaaaaaaaaaab"
+    pattern = "aaab"
+    assert kmp_search(text, pattern) == [8]
+
+
+def test_kmp_matches_naive_search():
+    text = "abcabcabcabc"
+    pattern = "abcabc"
+    naive = [
+        i
+        for i in range(len(text) - len(pattern) + 1)
+        if text[i : i + len(pattern)] == pattern
+    ]
+    assert kmp_search(text, pattern) == naive

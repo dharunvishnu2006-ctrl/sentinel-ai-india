@@ -10,6 +10,7 @@ from src.summarise import verify_summary
 from src.registry import AgentRegistry, min_capacity_that_fits
 from src.sorting import counting_sort
 from src.history import SinglyLinkedList, RecentActionsCache, UndoStack
+from src.hashtable import HashTable, BrokenHashTable
 
 
 @pytest.mark.asyncio
@@ -211,3 +212,27 @@ def test_undo_stack_reverses_and_handles_empty():
     stack.undo()
     assert state["value"] == 1
     assert stack.undo() is None
+
+
+def test_hashtable_put_and_get():
+    ht = HashTable()
+    ht.put("key1", "value1")
+    ht.put("key2", "value2")
+    assert ht.get("key1") == "value1"
+    assert ht.get("key2") == "value2"
+    assert ht.get("missing") is None
+
+
+def test_hashtable_resizes():
+    ht = HashTable(size=4)
+    for i in range(10):
+        ht.put(f"k{i}", i)
+    assert ht.size > 4
+    assert ht.get("k5") == 5
+
+
+def test_broken_hash_still_correct_just_slow():
+    bht = BrokenHashTable()
+    for i in range(50):
+        bht.put(f"k{i}", i)
+    assert bht.get("k25") == 25

@@ -18,6 +18,7 @@ from src.routing_advanced import (
     bellman_ford,
     floyd_warshall,
 )
+from src.topology import UnionFind, topological_sort
 
 
 @pytest.mark.asyncio
@@ -293,3 +294,23 @@ def test_floyd_warshall_matches_dijkstra():
     table = floyd_warshall(graph)
     _, dijkstra_cost = dijkstra(graph, "Sentinel", "Target")
     assert table["Sentinel"]["Target"] == dijkstra_cost
+
+
+def test_union_find_groups_transitively():
+    uf = UnionFind(["A", "B", "C", "D"])
+    uf.union("A", "B")
+    uf.union("B", "C")
+    assert uf.find("A") == uf.find("C")
+    assert uf.find("A") != uf.find("D")
+
+
+def test_topological_order_respects_deps():
+    deps = {"deploy": ["build"], "build": [], "test": ["build"]}
+    order = topological_sort(deps)
+    assert order.index("build") < order.index("deploy")
+    assert order.index("build") < order.index("test")
+
+
+def test_topological_sort_detects_cycle():
+    deps = {"a": ["b"], "b": ["c"], "c": ["a"]}
+    assert topological_sort(deps) is None

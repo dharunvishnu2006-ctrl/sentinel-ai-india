@@ -20,6 +20,12 @@ from src.routing_advanced import (
 )
 from src.topology import UnionFind, topological_sort
 from src.trie import Trie, kmp_search
+from src.windows import (
+    SlidingWindowAverage,
+    SegmentTree,
+    next_greater_element,
+    align_event_streams,
+)
 
 
 @pytest.mark.asyncio
@@ -343,3 +349,31 @@ def test_kmp_matches_naive_search():
         if text[i : i + len(pattern)] == pattern
     ]
     assert kmp_search(text, pattern) == naive
+
+
+def test_sliding_window_average():
+    sw = SlidingWindowAverage(window_size=3)
+    for v in [10, 20, 30, 40]:
+        sw.add(v)
+    assert sw.average() == (20 + 30 + 40) / 3
+
+
+def test_segment_tree_range_max_and_update():
+    st = SegmentTree([1, 5, 3, 9, 2])
+    assert st.query_max(0, 4) == 9
+    st.update(3, 0)
+    assert st.query_max(0, 4) == 5
+
+
+def test_next_greater_element():
+    result = next_greater_element([2, 1, 5, 3])
+    assert result == [5, 5, -1, -1]
+
+
+def test_two_pointers_aligns_correctly():
+    a = [1, 5, 10, 20]
+    b = [2, 6, 11, 25]
+    result = align_event_streams(a, b, max_gap=1)
+    assert (1, 2) in result
+    assert (5, 6) in result
+    assert (10, 11) in result

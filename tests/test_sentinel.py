@@ -34,6 +34,7 @@ from src.capacity import (
     knapsack_dp,
     urgency_order_selection,
 )
+from src.assign import Agent, greedy_assign, backtracking_assign
 
 
 @pytest.mark.asyncio
@@ -407,3 +408,21 @@ def test_dp_beats_or_matches_urgency_order():
     dp_value, _ = knapsack_dp(tasks, capacity=50)
     urgency_value, _ = urgency_order_selection(tasks, capacity=50)
     assert dp_value >= urgency_value
+
+
+def test_greedy_can_fail():
+    agent_a = Agent("A", {"scan", "deploy"})
+    agent_b = Agent("B", {"scan"})
+    tasks = [("task1", "scan"), ("task2", "deploy")]
+    result = greedy_assign(tasks, [agent_a, agent_b])
+    assert result["task2"] is None
+
+
+def test_backtracking_solves_it():
+    agent_a = Agent("A", {"scan", "deploy"})
+    agent_b = Agent("B", {"scan"})
+    tasks = [("task1", "scan"), ("task2", "deploy")]
+    result = backtracking_assign(tasks, [agent_a, agent_b])
+    assert result["task1"] is not None
+    assert result["task2"] is not None
+    assert result["task1"] != result["task2"]

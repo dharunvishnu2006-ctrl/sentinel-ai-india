@@ -225,7 +225,12 @@ def render_command_centre():
 
 
 def render_evolution():
-    from src.versions import load_versions, total_roadmap_steps
+    from src.versions import (
+        load_versions,
+        total_roadmap_steps,
+        feature_lines,
+        bug_lines,
+    )
 
     st.title("📈 How Sentinel AI India Grew")
     st.caption("Every number on this page comes from versions.json")
@@ -260,6 +265,49 @@ def render_evolution():
                     f"<b>{v['version']}</b><br/>{v['steps']}</div>",
                     unsafe_allow_html=True,
                 )
+
+    st.divider()
+    st.subheader("🔍 Version Detail")
+    for v in [x for x in versions if x["status"] == "shipped"]:
+        header = (
+            f"{v['version']} — {v['steps_covered']} steps, "
+            f"{len(v['features'])} features, {v['tests']} tests, "
+            f"{len(v['bugs_fixed'])} bugs fixed"
+        )
+        with st.expander(header):
+            st.markdown("**Features:**")
+            st.markdown("\n".join(feature_lines(v)))
+            if v["bugs_fixed"]:
+                st.markdown("**Bugs Fixed:**")
+                st.markdown("\n".join(bug_lines(v)))
+
+    st.divider()
+    st.subheader("📄 Decisions (ADRs)")
+    repo = "https://github.com/dharunvishnu2006-ctrl/" "sentinel-ai-india/blob/main"
+    st.markdown(
+        f"- [ADR 001 — itertools counter over trace_id/task "
+        f"as heap tie-breaker]"
+        f"({repo}/docs/adr/001-heap-tie-breaker.md)\n"
+        f"- [ADR 002 — Dijkstra over BFS for weighted routing]"
+        f"({repo}/docs/adr/002-dijkstra-over-bfs.md)"
+    )
+
+    st.divider()
+    st.subheader("⚠️ Known Limits")
+    st.markdown(
+        "- Everything is in memory — a restart loses all agent "
+        "and task state (v2 adds a database)\n"
+        "- Sentinel's Flask API has no authentication on /status\n"
+        "- Priority queue is not persisted; Streamlit re-running "
+        "the script can duplicate task creation\n"
+        "- export_history() writes tasks in heap-priority order, "
+        "not insertion order\n"
+        "- Retries cannot fix a genuinely down API, only smooth "
+        "over brief transient failures\n"
+        "- v1.0 and v1.1 share the same step range (1-133); "
+        "per-version step counts display independently rather "
+        "than as a deduplicated cumulative total"
+    )
 
 
 def render_about():

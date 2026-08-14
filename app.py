@@ -3,6 +3,7 @@ from src.agent import CloudShieldAgent, AutoPilotAgent
 from src.orchestrator import Orchestrator
 from src.routing import shortest_path
 from src.logging_setup import setup_logging
+from src.versions import current_version
 
 setup_logging()
 
@@ -10,7 +11,21 @@ st.set_page_config(page_title="Sentinel AI India", page_icon="🛰", layout="wid
 
 
 def render_home():
-    st.info("Home page — coming in C14")
+    st.title("🛰 Sentinel AI India")
+    st.caption("The multi-agent brain that unifies CloudShield X " "and AutoPilot ML X")
+
+    v = current_version()
+    st.info(
+        f"Live: {v['version']} — {v['steps_covered']} steps, " f"{v['tests']} tests"
+    )
+
+    st.subheader("The other two flagships")
+    st.markdown(
+        "- **CloudShield X** — AI-powered cloud security · "
+        "[repo](https://github.com/dharunvishnu2006-ctrl/cloudshield-x)\n"
+        "- **AutoPilot ML X** — autonomous MLOps platform · "
+        "[repo](https://github.com/dharunvishnu2006-ctrl/autopilot-ml-x)"
+    )
 
 
 def render_command_centre():
@@ -210,11 +225,73 @@ def render_command_centre():
 
 
 def render_evolution():
-    st.info("Evolution page — built in C14")
+    from src.versions import load_versions, total_roadmap_steps
+
+    st.title("📈 How Sentinel AI India Grew")
+    st.caption("Every number on this page comes from versions.json")
+
+    try:
+        versions = load_versions()
+    except FileNotFoundError as e:
+        st.error(f"versions.json missing: {e}")
+        return
+
+    grand_total = total_roadmap_steps(versions)
+    st.caption(f"Total roadmap: {grand_total} steps, {len(versions)} versions")
+
+    cols = st.columns(len(versions))
+    for i, v in enumerate(versions):
+        with cols[i]:
+            if v["status"] == "shipped":
+                st.markdown(
+                    f"<div style='background-color:{v['colour']};"
+                    f"padding:8px;border-radius:6px;text-align:center;"
+                    f"color:white;'>"
+                    f"<b>{v['version']}</b><br/>{v['completion']}%<br/>"
+                    f"<span style='font-size:0.75em'>"
+                    f"{v['steps_covered']}/{grand_total} steps</span></div>",
+                    unsafe_allow_html=True,
+                )
+            else:
+                st.markdown(
+                    f"<div style='border:3px dashed {v['colour']};"
+                    f"padding:8px;border-radius:6px;text-align:center;"
+                    f"color:{v['colour']};'>"
+                    f"<b>{v['version']}</b><br/>{v['steps']}</div>",
+                    unsafe_allow_html=True,
+                )
 
 
 def render_about():
-    st.info("About page — coming in C14")
+    from src.versions import current_version, bug_lines
+
+    st.title("ℹ️ About Sentinel AI India")
+
+    st.subheader("Tech Stack")
+    st.markdown(
+        "Python · Streamlit · Pydantic · Flask · Matplotlib · "
+        "Seaborn · Plotly · pandas · NumPy · pytest · Bandit"
+    )
+
+    st.subheader("The audit story")
+    st.markdown(
+        "v1 shipped in three days using 26 of its 133 assigned "
+        "roadmap steps. v1.1 audited that gap and closed it — "
+        "every step from 1 to 133 is now genuinely built, "
+        "including a live routing bug (BFS treating every hop "
+        "as equal) found and fixed with Dijkstra."
+    )
+
+    v = current_version()
+    st.subheader(f"Bugs fixed in {v['version']}")
+    for line in bug_lines(v):
+        st.markdown(line)
+
+    st.subheader("Links")
+    st.markdown(
+        "[GitHub Repository]"
+        "(https://github.com/dharunvishnu2006-ctrl/sentinel-ai-india)"
+    )
 
 
 page = st.sidebar.radio("Navigate", ["Home", "Command Centre", "Evolution", "About"])

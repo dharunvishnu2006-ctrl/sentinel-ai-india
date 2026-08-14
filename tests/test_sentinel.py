@@ -426,3 +426,79 @@ def test_backtracking_solves_it():
     assert result["task1"] is not None
     assert result["task2"] is not None
     assert result["task1"] != result["task2"]
+
+
+def test_timestamps_are_timezone_aware():
+    from datetime import datetime, timezone
+    from src.models import Task
+
+    t = Task(
+        id=1,
+        urgency=2,
+        name="test",
+        created_at=datetime.now(timezone.utc),
+    )
+    assert t.created_at.tzinfo is not None
+
+
+def test_agent_name_rejects_newline():
+    import pytest
+    from src.agent import CloudShieldAgent
+
+    with pytest.raises(ValueError):
+        CloudShieldAgent("Bad\nName")
+
+
+def test_status_cannot_be_set_directly():
+    class SafeAgent:
+        def __init__(self):
+            self._status = "idle"
+
+        @property
+        def status(self):
+            return self._status
+
+    agent = SafeAgent()
+    with pytest.raises(AttributeError):
+        agent.status = "hacked"
+
+
+def test_no_print_statements_remain():
+    import pathlib
+
+    src_files = pathlib.Path("src").glob("*.py")
+    for f in src_files:
+        content = f.read_text(encoding="utf-8")
+        assert "print(" not in content, f"print() found in {f}"
+
+
+def test_no_hardcoded_api_key():
+    import pathlib
+    import re
+
+    src_files = pathlib.Path("src").glob("*.py")
+    suspicious_pattern = re.compile(r'api_key\s*=\s*["\'][^"\']+["\']')
+    for f in src_files:
+        content = f.read_text(encoding="utf-8")
+        matches = suspicious_pattern.findall(content)
+        assert not matches, f"Hardcoded key-like value in {f}: {matches}"
+
+
+def test_trace_id_in_every_log_line():
+    import json
+    from src.logging_setup import setup_logging
+    from src.orchestrator import Orchestrator
+
+    setup_logging()
+    orch = Orchestrator()
+    orch.add_task(2, "trace test task unique marker")
+    with open("sentinel.log", encoding="utf-8") as f:
+        lines = f.readlines()
+    task_lines = [
+        line
+        for line in lines
+        if "trace test task unique marker" in line and "Task queued" in line
+    ]
+    assert len(task_lines) > 0
+    entry = json.loads(task_lines[-1])
+    assert "trace_id" in entry["message"]

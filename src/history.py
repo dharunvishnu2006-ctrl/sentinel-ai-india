@@ -70,14 +70,6 @@ class RecentActionsCache:
         return result
 
 
-cache = RecentActionsCache(capacity=5)
-for i in range(8):
-    cache.add_action(f"action-{i}")
-
-print("Forward (newest first):", cache.walk_forward())
-print("Backward (oldest first):", cache.walk_backward())
-
-
 class UndoStack:
     def __init__(self):
         self.stack = []

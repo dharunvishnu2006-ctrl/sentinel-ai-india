@@ -47,7 +47,3 @@ def min_capacity_that_fits(load, max_capacity=1_000_000):
         else:
             low = mid + 1
     return result, checks
-
-
-result, checks = min_capacity_that_fits(load=347_000)
-print(f"Min capacity: {result}, checks: {checks}")

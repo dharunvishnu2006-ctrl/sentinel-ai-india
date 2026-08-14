@@ -26,6 +26,14 @@ from src.windows import (
     next_greater_element,
     align_event_streams,
 )
+from src.capacity import (
+    can_handle,
+    SCAN,
+    ROUTE,
+    DEPLOY,
+    knapsack_dp,
+    urgency_order_selection,
+)
 
 
 @pytest.mark.asyncio
@@ -377,3 +385,25 @@ def test_two_pointers_aligns_correctly():
     assert (1, 2) in result
     assert (5, 6) in result
     assert (10, 11) in result
+
+
+def test_capability_bitmask_matching():
+    agent = SCAN | ROUTE
+    assert can_handle(agent, SCAN | ROUTE) is True
+    assert can_handle(agent, SCAN | DEPLOY) is False
+
+
+def test_knapsack_dp_matches_brute_force():
+    tasks = [(2, 3), (3, 4), (4, 5), (5, 6)]
+    from src.capacity import brute_force_knapsack
+
+    bf_value, _ = brute_force_knapsack(tasks, capacity=5)
+    dp_value, _ = knapsack_dp(tasks, capacity=5)
+    assert bf_value == dp_value
+
+
+def test_dp_beats_or_matches_urgency_order():
+    tasks = [(10, 60), (20, 100), (30, 120)]
+    dp_value, _ = knapsack_dp(tasks, capacity=50)
+    urgency_value, _ = urgency_order_selection(tasks, capacity=50)
+    assert dp_value >= urgency_value

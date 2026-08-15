@@ -11,7 +11,7 @@
 
 ---
 
-**Live Demo:** https://https://sentinel-ai-india-v1-hpqhmqzz2hevjgjeyfomka.streamlit.app/#sentinel-ai-india-command-centre
+**Live Demo:** sentinel-ai-india-v1-hpqhmqzz2hevjgjeyfomka.streamlit.app/#sentinel-ai-india-command-centre
 
 ---
 

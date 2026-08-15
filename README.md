@@ -33,8 +33,30 @@ v1.1 is a completion release: v1 shipped in three days using 26 of its assigned 
 - 🗺 Graph-based Agent Routing — BFS kept, Dijkstra added (see Results)
 
 **v1.1 additions:**
-- C1 Typed Records and Validation · C2 Structured Logging and Errors · C3 Python Craft Refresher · C4 OOP Agent Hierarchy · C5 Generators and Large Files · C6 Concurrency Beyond asyncio · C7 Telemetry with NumPy and Pandas · C8 Theme-Aware Command-Centre Charts · C9 REST Clients for Both Flagships · C10 Engineering Discipline · C11 LLM-Assisted Incident Summaries · C12 Layer 1 Consolidation
-- D1 Agent Registry · D2 Agent Leaderboard · D3 Task History and Undo · D4 Capability Cache · D5 Supervision Tree · D6 Weighted Routing (Dijkstra) · D7 Resilience and Ordering · D8 Capability Matching · D9 Metric Windows · D10 Capacity Planning · D11 Fast Assignment · D12 Competitive Practice
+- C1 Typed Records and Validation
+- C2 Structured Logging and Errors
+- C3 Python Craft RefresheR
+- C4 OOP Agent Hierarchy
+- C5 Generators and Large Files
+- C6 Concurrency Beyond asyncio
+- C7 Telemetry with NumPy and Pandas
+- C8 Theme-Aware Command-Centre Charts
+- C9 REST Clients for Both Flagships
+- C10 Engineering Discipline
+- C11 LLM-Assisted Incident Summaries
+- C12 Layer 1 Consolidation
+- D1 Agent Registry
+- D2 Agent Leaderboard
+- D3 Task History and Undo
+- D4 Capability Cache
+- D5 Supervision Tree
+- D6 Weighted Routing (Dijkstra)
+- D7 Resilience and Ordering
+- D8 Capability Matching
+- D9 Metric Windows
+- D10 Capacity Planning
+- D11 Fast Assignment
+- D12 Competitive Practice
 
 ---
 

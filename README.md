@@ -9,11 +9,8 @@
 ![pytest](https://img.shields.io/badge/pytest-54%20tests%20passing-brightgreen)
 ![Security](https://img.shields.io/badge/Security-Bandit%20Scanned-orange)
 
----
-
-**Live Demo:** https://sentinel-ai-india-v1-hpqhmqzz2hevjgjeyfomka.streamlit.app/#sentinel-ai-india-command-centre
-
----
+## 🚀 Live Demo
+**[Try it live →](https://sentinel-ai-india-v1-hpqhmqzz2hevjgjeyfomka.streamlit.app/)**
 
 ## 🎯 What is Sentinel AI India?
 

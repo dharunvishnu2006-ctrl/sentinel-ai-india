@@ -6,17 +6,16 @@ st.title("ℹ️ About Sentinel AI India")
 
 st.subheader("Tech Stack")
 st.markdown(
-    "Python · Streamlit · Pydantic · Flask · Matplotlib · "
-    "Seaborn · Plotly · pandas · NumPy · pytest · Bandit"
+    "Python · Streamlit · Pydantic · Flask · pandas · " "NumPy · pytest · Bandit"
 )
 
 st.subheader("The audit story")
 st.markdown(
     "v1 shipped in three days using 26 of its 133 assigned "
     "roadmap steps. v1.1 audited that gap and closed it — "
-    "every step from 1 to 133 is now genuinely built, "
-    "including a live routing bug (BFS treating every hop "
-    "as equal) found and fixed with Dijkstra."
+    "every step from 1 to 133 is now genuinely built. "
+    "The app still uses BFS; Dijkstra is tested but not "
+    "yet integrated."
 )
 
 v = current_version()

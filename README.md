@@ -1,122 +1,74 @@
-# 🛰 Sentinel AI India v1.1 — Multi-Agent Command Centre
+# Sentinel AI India
 
-**The Unified Command Centre — where CloudShield X meets AutoPilot ML X**
+Security command-centre software built one version at a time: it keeps a
+list of its agents, sorts tasks by urgency, finds the shortest route between
+agents, and checks whether CloudShield X and AutoPilot ML X are online.
+Its agents are Python classes today; LLM agents arrive in v4.
 
-![Python](https://img.shields.io/badge/Python-3.14-blue)
-![Flask](https://img.shields.io/badge/Flask-API-black)
-![asyncio](https://img.shields.io/badge/asyncio-Concurrency-green)
-![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-red)
-![pytest](https://img.shields.io/badge/pytest-54%20tests%20passing-brightgreen)
-![Security](https://img.shields.io/badge/Security-Bandit%20Scanned-orange)
+**Live demo:** https://sentinel-ai-india.streamlit.app
+**Repository:** https://github.com/dharunvishnu2006-ctrl/sentinel-ai-india
 
-## 🚀 Live Demo
-**[Try it live →](https://sentinel-ai-india-v1-hpqhmqzz2hevjgjeyfomka.streamlit.app/)**
+![version](https://img.shields.io/badge/version-v1.1-B45309) ![tests](https://img.shields.io/badge/tests-80%20passed-brightgreen) ![python](https://img.shields.io/badge/python-3.14-blue)
 
-## 🎯 What is Sentinel AI India?
+## What it does
 
-Sentinel AI India is the **multi-agent brain** that unifies my two other flagship projects — [CloudShield X](https://github.com/dharunvishnu2006-ctrl/cloudshield-x) (security) and [AutoPilot ML X](https://github.com/dharunvishnu2006-ctrl/autopilot-ml-x) (machine learning) — into a single command centre.
+- Keeps a registry of its agents and finds one by id with binary search.
+- Sorts tasks in a priority queue: the most urgent goes first. Try it on
+  the Home page; your test tasks stay in your browser session.
+- Finds the shortest route between agents with BFS (every link is one hop).
+- Checks CloudShield X and AutoPilot ML X through their REST APIs and says
+  "online" or "not reachable", with the time checked.
+- Records each handled task with a trace id in task_history.csv.
 
-v1.1 is a completion release: v1 shipped in three days using 26 of its assigned 133 roadmap steps. This version closes that gap — every step from 1 to 133 is now genuinely built, not just assigned, and a live routing bug found during the audit has been fixed.
+## What's new in v1.1
 
----
+v1.1 built all 133 roadmap steps (v1 had used 26): typed records and
+validation, JSON logs with trace ids, an agent class hierarchy, REST clients
+for both flagships, the agent registry, task history, and BFS routing, with
+Dijkstra, Bellman-Ford and Floyd-Warshall written and tested. The home page
+polish (20 October 2026) replaced the Command Centre's typed-in charts with
+numbers from the running system and removed all HTML.
 
-## ✨ Features (v1.1 — 26 features, all 133 steps)
+## Run it
 
-**Original v1 features (kept, some upgraded below):**
-- 🤖 Agent Skeleton — now a real `BaseAgent` hierarchy with polymorphism
-- 📨 Async Message Passing
-- ⚡ Priority-Queue Orchestrator — now with deterministic FIFO tie-breaking
-- 🌐 Unified Flask API
-- 🗺 Graph-based Agent Routing — BFS kept, Dijkstra added (see Results)
+    pip install -r requirements.txt
+    streamlit run app.py
+    pytest -q
 
-**v1.1 additions:**
-- C1 Typed Records and Validation
-- C2 Structured Logging and Errors
-- C3 Python Craft RefresheR
-- C4 OOP Agent Hierarchy
-- C5 Generators and Large Files
-- C6 Concurrency Beyond asyncio
-- C7 Telemetry with NumPy and Pandas
-- C8 Theme-Aware Command-Centre Charts
-- C9 REST Clients for Both Flagships
-- C10 Engineering Discipline
-- C11 LLM-Assisted Incident Summaries
-- C12 Layer 1 Consolidation
-- D1 Agent Registry
-- D2 Agent Leaderboard
-- D3 Task History and Undo
-- D4 Capability Cache
-- D5 Supervision Tree
-- D6 Weighted Routing (Dijkstra)
-- D7 Resilience and Ordering
-- D8 Capability Matching
-- D9 Metric Windows
-- D10 Capacity Planning
-- D11 Fast Assignment
-- D12 Competitive Practice
+## Numbers
 
----
+| What | Value |
+|---|---|
+| Tests | 80 passed in 27.68 s (pytest -q) |
+| Roadmap steps built | 133 of 600 |
+| Agents registered | 2 |
+| Tasks recorded | 2 (development runs) |
 
-## 🧪 Results (from my own measured runs)
+The old Command Centre drew four good-looking charts from numbers typed into
+the code; every number on the page now comes from the registry, the status
+checks, task_history.csv or versions.json.
 
-- ✅ 54/54 pytest tests passing (5 from v1, 49 new)
-- ✅ **BFS vs Dijkstra**: on a graph where the 2-hop path costs 500ms and the 3-hop path costs 90ms, BFS returned the 2-hop (slower) path; Dijkstra correctly found the 90ms path — the exact bug this version was built to fix
-- ✅ **BST vs AVL**: inserting 500 agents in ascending load order gave a plain BST a depth of exactly 500 (degenerated to a linked list); AVL kept the same input at depth 9
-- ✅ **Seven sorts measured**: insertion sort beat every O(n log n) algorithm on nearly-sorted data; quicksort with a naive pivot crashed with `RecursionError` on that same input
-- ✅ **Generators**: streaming a 1M-line file used 0.16 MB peak memory vs 65.48 MB loading it as a list
-- ✅ **Knapsack DP vs urgency-order**: DP found 48 more value (≈11%) than v1's urgency-first selection on the same 18 tasks
-- ✅ Zero `print()` statements remain in `src/`; zero hardcoded secrets; every log line carries a `trace_id`
+## Known limits
 
----
+No AI yet: the agents are Python classes. The queue lives in memory, so a
+restart loses it; only task_history.csv is kept. The Flask /status API has no
+authentication. CloudShield X and AutoPilot ML X run locally, so on the live
+demo they show as not reachable. The app routes with BFS; Dijkstra is tested
+but not yet integrated.
 
-## 🛠 How to Run Locally
+## Built with
 
-```bash
-git clone https://github.com/dharunvishnu2006-ctrl/sentinel-ai-india.git
-cd sentinel-ai-india
-bash scripts/setup.sh
-streamlit run app.py
-```
+v1 and v1.1 were written by hand. The home page polish was built with
+Claude Code and Claude: I wrote the spec, checked the plan, ran every check,
+and made the accent colour, About text and versions.json changes by hand.
+Python, Streamlit, Pydantic, Flask, pandas, NumPy, pytest, Bandit.
 
----
+Docs: [design](docs/design.md) · [ADRs](docs/adr/) · [build log](docs/build_log.md)
 
-## 🏗 Architecture
+## Versions
 
-![Architecture](docs/architecture.png)
-
-Agents (`CloudShieldAgent`, `AutoPilotAgent`) communicate through validated, typed messages. The Orchestrator serves tasks by urgency via a min-heap with a counter tie-breaker for FIFO fairness. Routing uses Dijkstra for weighted paths (BFS kept for unweighted questions). `src/clients.py` calls both flagships over HTTP with timeouts, retries, and graceful degradation. Every component logs structured JSON with a trace id. Full design rationale: [`docs/design.md`](docs/design.md). Decisions: [`docs/adr/`](docs/adr/).
-
----
-
-## 📚 What I Learned
-
-*(kept from v1, extended)*
-- Everything from v1, plus:
-- Validating every message at a system boundary with Pydantic, and what a naive datetime silently gets wrong
-- The real cost of keeping an array sorted for binary search, measured against the O(1) cost a hash table or linked-list insert avoids
-- That asymptotic complexity describes the worst case, not necessarily my case — insertion sort beating heap sort on nearly-sorted data, and Python's built-in string operations beating my own KMP implementation at moderate scale, taught me to measure before assuming
-- Mocking external HTTP calls so a 54-test suite runs in under 4 seconds with zero network dependency
-
----
-
-## 🔗 Ecosystem
-
-This project is part of a 3-flagship AI/ML + Cloud + Cyber Security portfolio:
-- 🛡 [CloudShield X](https://github.com/dharunvishnu2006-ctrl/cloudshield-x) — Security monitoring system
-- 🚀 [AutoPilot ML X](https://github.com/dharunvishnu2006-ctrl/autopilot-ml-x) — Automated ML pipeline
-- 🛰 **Sentinel AI India** (this repo) — Unified command centre connecting both
-
-**Roadmap:** v1.1 complete — 133/133 steps. Sentinel has 5 versions total. Next: v2 gives it a database.
-
----
-
-## 👨‍💻 Author
-
-**J. Dharun Vishnu**
-BSc IT Student | Building toward AI/ML + Cloud + Cyber Security Engineering
-
----
-
-## 🔒 Security
-
-Scanned with [Bandit](https://bandit.readthedocs.io/) — clean, zero findings in `src/`.
+| Version | What | Tests |
+|---|---|---|
+| v1.0 | Foundation: agent backbone sprint | 5 |
+| v1.1 | Completion: all 133 steps, honest home page | 80 |
+| v2 | Next: memory in PostgreSQL and a NumPy routing brain | |

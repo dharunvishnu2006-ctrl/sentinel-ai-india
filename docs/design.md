@@ -76,3 +76,13 @@ timestamps required to be timezone-aware.
 
 AI-generated mockup of the target look. Not the current app. Its numbers,
 alerts, logins and compliance lines are not real.
+
+## Later
+
+- Wire Dijkstra into the app with measured latencies, then write
+  ADR 002 (v2 brings the NumPy routing brain).
+- main.py imports Agent from src.agent, which does not exist; fix it,
+  and the old flake8 issues in main.py and seed_db.py, in their own
+  commit.
+- Check whether anything still uses seaborn, plotly or matplotlib;
+  if not, remove them from requirements.txt.

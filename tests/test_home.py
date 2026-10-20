@@ -1,6 +1,7 @@
 import ast
 import json
 import re
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
@@ -82,7 +83,34 @@ def test_systems_online_counts_none_offline(offline):
     assert home_data.systems_online(checks) == 0
     for check in checks:
         assert check["status"] == "degraded"
-        assert check["checked_at"] is not None
+        assert check["checked_at"].utcoffset() == timedelta(0)
+
+
+def test_status_line_shows_utc():
+    from views.shared import status_line
+
+    check = {
+        "status": "degraded",
+        "checked_at": datetime(2026, 10, 20, 8, 5, 9, tzinfo=timezone.utc),
+    }
+    assert status_line(check) == "not reachable, checked 08:05:09 UTC"
+
+
+def test_status_lines_on_pages_show_utc(offline):
+    home = _run_page()
+    home_text = " ".join(m.value for m in home.main.markdown)
+    assert home_text.count(" UTC") == 2
+    centre = _run_page("views/command_centre.py")
+    centre_text = " ".join(c.value for c in centre.main.caption)
+    assert centre_text.count(" UTC") == 2
+
+
+def test_task_history_column_order():
+    calls = _chart_calls("dataframe")
+    assert calls
+    for page, node in calls:
+        order = _keyword(node, "column_order")
+        assert order == ["urgency", "task", "trace_id"], page
 
 
 def test_display_status_maps_failures():

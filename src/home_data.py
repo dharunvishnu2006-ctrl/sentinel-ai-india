@@ -1,6 +1,6 @@
 import csv
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 from src.agent import AutoPilotAgent, CloudShieldAgent
@@ -50,7 +50,7 @@ def _check(name, fetch):
         "name": name,
         "status": result["status"],
         "data": result["data"],
-        "checked_at": datetime.now(),
+        "checked_at": datetime.now(timezone.utc),
     }
 
 

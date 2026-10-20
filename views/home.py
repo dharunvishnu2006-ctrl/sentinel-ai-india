@@ -77,7 +77,11 @@ with left:
 with right:
     st.subheader("Task history")
     if history:
-        st.dataframe(history, hide_index=True)
+        st.dataframe(
+            history,
+            hide_index=True,
+            column_order=["urgency", "task", "trace_id"],
+        )
         st.caption("Tasks recorded during development runs - not live alerts")
     else:
         st.caption("No tasks recorded yet.")

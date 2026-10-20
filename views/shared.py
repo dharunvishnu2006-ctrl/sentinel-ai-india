@@ -10,4 +10,4 @@ def cached_system_checks():
 
 def status_line(check):
     checked = check["checked_at"].strftime("%H:%M:%S")
-    return f"{display_status(check['status'])}, checked {checked}"
+    return f"{display_status(check['status'])}, checked {checked} UTC"

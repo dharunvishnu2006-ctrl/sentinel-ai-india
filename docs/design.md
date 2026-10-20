@@ -86,3 +86,5 @@ alerts, logins and compliance lines are not real.
   commit.
 - Check whether anything still uses seaborn, plotly or matplotlib;
   if not, remove them from requirements.txt.
+- Black (88) re-joins lines wrapped at 76; decide with appa: set Black to 76
+  for the whole repo in its own commit, or relax the 76 rule.  

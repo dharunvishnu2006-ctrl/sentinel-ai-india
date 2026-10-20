@@ -69,3 +69,10 @@ timestamps required to be timezone-aware.
   brief transient failures.
 - Mocked tests verify our own logic correctly but cannot catch
   changes in the real CloudShield/AutoPilot API contracts.
+
+## Target look
+
+![Target look](design/target_look.png)
+
+AI-generated mockup of the target look. Not the current app. Its numbers,
+alerts, logins and compliance lines are not real.

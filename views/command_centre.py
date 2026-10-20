@@ -1,5 +1,6 @@
 import streamlit as st
 
+from src.brand import BRAND
 from src.home_data import (
     ROUTE_GRAPH,
     build_agents,
@@ -28,6 +29,7 @@ if history:
         x="Urgency",
         y="Tasks",
         height=220,
+        color=BRAND.accent,
     )
 else:
     st.info("Telemetry appears as real tasks are recorded.")

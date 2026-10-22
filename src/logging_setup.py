@@ -16,6 +16,8 @@ class JsonFormatter(logging.Formatter):
 
 def setup_logging():
     logger = logging.getLogger("sentinel")
+    if logger.handlers:
+        return logger
     logger.setLevel(logging.INFO)
 
     file_handler = logging.FileHandler("sentinel.log", encoding="utf-8")
